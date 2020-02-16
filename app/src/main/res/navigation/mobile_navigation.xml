@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mobile_navigation"
+    app:startDestination="@+id/navigation_home">
+
+    <!-- Top navigation (bottom) -->
+    <fragment
+        android:id="@+id/navigation_home"
+        android:name="com.example.vales2.ui.home.HomeFragment"
+        android:label="@string/menu_home"
+        tools:layout="@layout/fragment_home" />
+
+    <fragment
+        android:id="@+id/navigation_clients"
+        android:name="com.example.vales2.ui.clients.ClientsFragment"
+        android:label="@string/menu_clients"
+        tools:layout="@layout/fragment_clients" />
+
+    <fragment
+        android:id="@+id/navigation_companies"
+        android:name="com.example.vales2.ui.companies.CompaniesFragment"
+        android:label="@string/menu_companies"
+        tools:layout="@layout/fragment_companies" />
+
+    <!-- Drawer navigation -->
+    <fragment
+        android:id="@+id/nav_contact_us"
+        android:name="com.example.vales2.ui.contact_us.ContactUsFragment"
+        android:label="@string/menu_contact_us"
+        tools:layout="@layout/fragment_home" />
+
+    <fragment
+        android:id="@+id/nav_service_payment"
+        android:name="com.example.vales2.ui.service_payment.ServicePaymentFragment"
+        android:label="@string/menu_service_payment"
+        tools:layout="@layout/fragment_service_payment" />
+
+    <fragment
+        android:id="@+id/nav_adco_tutorials"
+        android:name="com.example.vales2.ui.adco_tutorials.AdcoTutorialsFragment"
+        android:label="@string/menu_adco_tutorials"
+        tools:layout="@layout/fragment_adco_tutorials" />
+
+    <fragment
+        android:id="@+id/nav_adco_manual"
+        android:name="com.example.vales2.ui.adco_manual.AdcoManualFragment"
+        android:label="@string/menu_adco_manual"
+        tools:layout="@layout/fragment_adco_manual" />
+
+    <fragment
+        android:id="@+id/nav_logout"
+        android:name="com.example.vales2.ui.logout.LogoutFragment"
+        android:label="@string/menu_logout"
+        tools:layout="@layout/fragment_logout" />
+
+</navigation>

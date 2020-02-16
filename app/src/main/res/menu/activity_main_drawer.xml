@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_contact_us"
+            android:icon="@drawable/ic_send_black_24dp"
+            android:title="@string/menu_contact_us" />
+        <item
+            android:id="@+id/nav_service_payment"
+            android:icon="@drawable/ic_attach_money_black_24dp"
+            android:title="@string/menu_service_payment" />
+        <item
+            android:id="@+id/nav_adco_tutorials"
+            android:icon="@drawable/ic_video_library_black_24dp"
+            android:title="@string/menu_adco_tutorials" />
+        <item
+            android:id="@+id/nav_adco_manual"
+            android:icon="@drawable/ic_library_books_black_24dp"
+            android:title="@string/menu_adco_manual" />
+        <item
+            android:id="@+id/nav_logout"
+            android:icon="@drawable/ic_exit_to_app_black_24dp"
+            android:title="@string/menu_logout" />
+    </group>
+
+</menu>
