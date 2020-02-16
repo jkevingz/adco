@@ -18,4 +18,8 @@
     <string name="menu_adco_tutorials">Tutoriales ADCO</string>
     <string name="menu_adco_manual">Manual ADCO</string>
     <string name="menu_logout">Cerrar sesion</string>
+    <string name="login_email_input">Correo</string>
+    <string name="login_pass_input">Contraseña</string>
+    <string name="login_enter_button">Entrar</string>
+    <string name="login_register_button">Registrar</string>
 </resources>
