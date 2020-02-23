@@ -21,4 +21,6 @@
     <string name="login_pass_input">Contraseña</string>
     <string name="login_enter_button">Entrar</string>
     <string name="login_register_button">Registrar</string>
+    <string name="client_name_placeholder">Name</string>
+    <string name="no_results">No hay resultados</string>
 </resources>
