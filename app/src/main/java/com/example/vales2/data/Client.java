@@ -79,10 +79,20 @@ public class Client {
 
   /**
    * Get the client's active.
+   *
    * @return Whether is active or blocked.
    */
   public boolean isActive() {
     return active;
+  }
+
+  /**
+   * Alias for negating isActive method.
+   *
+   * @return Whether is blocked or active.
+   */
+  public boolean isBlocked() {
+    return !isActive();
   }
 
   /**
@@ -95,11 +105,4 @@ public class Client {
     this.active = active;
     return this;
   }
-
-  @NonNull
-  @Override
-  public String toString() {
-    return getId();
-  }
-
 }
