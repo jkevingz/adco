@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.SearchView;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -28,6 +29,11 @@ public class ClientsFragment extends Fragment {
    * The clients adapter in charge of passing the data to the recycler.
    */
   private ClientsAdapter clientsAdapter;
+
+  /**
+   * The view model owned by this class.
+   */
+  private ClientsViewModel clientsViewModel;
 
   /**
    * Initialize the recycler and its adapter. This will also start the skeleton
@@ -63,18 +69,43 @@ public class ClientsFragment extends Fragment {
    * depending on the clients list size that is being observed.
    */
   private void initViewModel() {
-    ClientsViewModel clientsViewModel = new ViewModelProvider(this).get(ClientsViewModel.class);
+    clientsViewModel = new ViewModelProvider(this).get(ClientsViewModel.class);
     clientsViewModel.getClientList();
 
     clientsViewModel.clientList.observe(getViewLifecycleOwner(), clients -> {
       clientsAdapter.setClients(clients);
       recyclerViewStudents.hideShimmerAdapter();
-      if (clients.isEmpty()) {
-        textViewNoResultsFound.setVisibility(View.VISIBLE);
+      final int visibility = clients.isEmpty() ? View.VISIBLE : View.GONE;
+      textViewNoResultsFound.setVisibility(visibility);
+    });
+  }
+
+  /**
+   * Initialize the search view that is used to filter the clients out by their
+   * name.
+   *
+   * @param root The root to find the view elements.
+   */
+  private void initSearchView(View root) {
+    SearchView searchView = root.findViewById(R.id.fragment_clients_search);
+
+    searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+      @Override
+      public boolean onQueryTextSubmit(String query) {
+        clientsViewModel.search(query);
+        return false;
       }
-      else {
-        textViewNoResultsFound.setVisibility(View.GONE);
+
+      @Override
+      public boolean onQueryTextChange(String newText) {
+        clientsViewModel.search(newText);
+        return false;
       }
+    });
+
+    searchView.setOnCloseListener(() -> {
+      clientsViewModel.search("");
+      return false;
     });
   }
 
@@ -88,6 +119,7 @@ public class ClientsFragment extends Fragment {
     initRecycler(root);
     initNoResultsFound(root);
     initViewModel();
+    initSearchView(root);
 
     return root;
   }

@@ -7,20 +7,30 @@ import java.util.ArrayList;
 
 public class ClientsViewModel extends ViewModel {
 
-    /**
-     * Repository used to communicate with firebase.
-     */
-    private ClientsRepository clientsRepository = new ClientsRepository();
+  /**
+   * Repository used to communicate with firebase.
+   */
+  private ClientsRepository clientsRepository = new ClientsRepository();
 
-    /**
-     * Live data with a list of clients.
-     */
-    LiveData<ArrayList<Client>> clientList;
+  /**
+   * Live data with a list of clients.
+   */
+  LiveData<ArrayList<Client>> clientList;
 
-    /**
-     * Call the repository to grab the available clients.
-     */
-    void getClientList() {
-        clientList = clientsRepository.getClients();
-    }
+  /**
+   * Call the repository to grab the available clients.
+   */
+  void getClientList() {
+    clientList = clientsRepository.getClients();
+  }
+
+  /**
+   * Call the repository to filter the available clients.
+   *
+   * @param text The string query to search for.
+   */
+  void search(String text) {
+    clientsRepository.search(text);
+  }
+
 }

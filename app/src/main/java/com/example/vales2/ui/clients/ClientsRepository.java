@@ -29,6 +29,76 @@ class ClientsRepository {
   private ArrayList<Client> userList = new ArrayList<>();
 
   /**
+   * Runtime query string the data will always be filtered out before displaying
+   * it to the final user. By default is an empty string, but this will be
+   * change by the search method.
+   */
+  private String queryString = "";
+
+  /**
+   * The child event listener to search for clients in firebase.
+   */
+  private ChildEventListener childEventListener = null;
+
+  /**
+   * Search for clients in firebase.
+   */
+  private void initFirebaseCall() {
+    // Initialize the child listener if it's null only to avoid having multiple
+    // listeners.
+    if (childEventListener == null) {
+      childEventListener = new ChildEventListener() {
+        @Override
+        public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+          Client addedClient = dataSnapshot.getValue(Client.class);
+          if (addedClient != null) {
+            addedClient.setId(dataSnapshot.getKey());
+            userList.add(addedClient);
+            search(queryString);
+          }
+        }
+
+        @Override
+        public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+          Client changedClient = dataSnapshot.getValue(Client.class);
+          if (changedClient != null) {
+            changedClient.setId(dataSnapshot.getKey());
+
+            for (int index = 0; index < userList.size(); index++) {
+              if (userList.get(index).getId().equals(changedClient.getId())) {
+                userList.set(index, changedClient);
+                search(queryString);
+              }
+            }
+          }
+        }
+
+        @Override
+        public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
+          for (int index = 0; index < userList.size(); index++) {
+            if (userList.get(index).getId().equals(dataSnapshot.getKey())) {
+              userList.removeIf(client -> client.getId().equals(dataSnapshot.getKey()));
+              search(queryString);
+            }
+          }
+        }
+
+        @Override
+        public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+          // No idea when this happens.
+        }
+
+        @Override
+        public void onCancelled(@NonNull DatabaseError databaseError) {
+          // No idea when this happens.
+        }
+      };
+    }
+
+    databaseReference.addChildEventListener(childEventListener);
+  }
+
+  /**
    * Call firebase and get the available clients linked to the current logged in
    * user.
    *
@@ -37,53 +107,23 @@ class ClientsRepository {
   MutableLiveData<ArrayList<Client>> getClients() {
     userList.clear();
 
-    databaseReference.addChildEventListener(new ChildEventListener() {
-      @Override
-      public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-        Client addedClient = dataSnapshot.getValue(Client.class);
-        if (addedClient != null) {
-          addedClient.setId(dataSnapshot.getKey());
-          userList.add(addedClient);
-          userListMutableLiveData.setValue(userList);
-        }
-      }
-
-      @Override
-      public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-        Client changedClient = dataSnapshot.getValue(Client.class);
-        if (changedClient != null) {
-          changedClient.setId(dataSnapshot.getKey());
-
-          for (int index = 0; index < userList.size(); index++) {
-            if (userList.get(index).getId().equals(changedClient.getId())) {
-              userList.set(index, changedClient);
-              userListMutableLiveData.setValue(userList);
-            }
-          }
-        }
-      }
-
-      @Override
-      public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
-        for (int index = 0; index < userList.size(); index++) {
-          if (userList.get(index).getId().equals(dataSnapshot.getKey())) {
-            userList.removeIf(client -> client.getId().equals(dataSnapshot.getKey()));
-            userListMutableLiveData.setValue(userList);
-          }
-        }
-      }
-
-      @Override
-      public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-        // No idea when this happens.
-      }
-
-      @Override
-      public void onCancelled(@NonNull DatabaseError databaseError) {
-        // No idea when this happens.
-      }
-    });
+    initFirebaseCall();
 
     return userListMutableLiveData;
   }
+
+  /**
+   * Filter the clients out by their name.
+   *
+   * @param text The string query to search for.
+   */
+  void search(String text) {
+    // Save the last string to filter the data out on firebase changes.
+    queryString = text;
+
+    ArrayList<Client> filteredList = new ArrayList<>(userList);
+    filteredList.removeIf(client -> !client.getName().toLowerCase().contains(text.toLowerCase()));
+    userListMutableLiveData.setValue(filteredList);
+  }
+
 }

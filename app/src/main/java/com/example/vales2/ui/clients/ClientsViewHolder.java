@@ -36,7 +36,9 @@ class ClientsViewHolder extends RecyclerView.ViewHolder {
     if (client.isBlocked()) {
       int dangerColor = textViewClientName.getContext().getResources().getColor(R.color.danger, null);
       textViewClientName.setTextColor(dangerColor);
-      textViewClientName.setCompoundDrawablesWithIntrinsicBounds(0,0, R.drawable.ic_warning_black_20dp, 0);
+      textViewClientName.setCompoundDrawablesWithIntrinsicBounds(
+        0, 0, R.drawable.ic_warning_black_20dp, 0
+      );
     }
   }
 }

@@ -1,6 +1,5 @@
 package com.example.vales2.data;
 
-import androidx.annotation.NonNull;
 import com.google.firebase.database.Exclude;
 
 public class Client {
@@ -8,17 +7,17 @@ public class Client {
   /**
    * The unique identifier.
    */
-  public String id;
+  private String id;
 
   /**
    * The label of the client.
    */
-  public String name;
+  private String name;
 
   /**
    * Whether is active or blocked.
    */
-  public boolean active;
+  private boolean active;
 
   /**
    * Clients's empty constructor.
