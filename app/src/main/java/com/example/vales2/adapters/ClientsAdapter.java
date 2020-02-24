@@ -25,7 +25,7 @@ public class ClientsAdapter extends RecyclerView.Adapter<ClientsAdapter.ImageVie
 
   @Override
   public ImageViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-    v = LayoutInflater.from(ctx).inflate(R.layout.cardview_client, parent, false);
+    v = LayoutInflater.from(ctx).inflate(R.layout.card_view_client, parent, false);
 
     return new ImageViewHolder(v);
   }

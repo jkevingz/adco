@@ -1,19 +1,26 @@
 package com.example.vales2.ui.clients;
 
 import androidx.lifecycle.LiveData;
-import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
+import com.example.vales2.data.Client;
+import java.util.ArrayList;
 
 public class ClientsViewModel extends ViewModel {
 
-    private MutableLiveData<String> mText;
+    /**
+     * Repository used to communicate with firebase.
+     */
+    private ClientsRepository clientsRepository = new ClientsRepository();
 
-    public ClientsViewModel() {
-        mText = new MutableLiveData<>();
-        mText.setValue("This is Clients fragment");
-    }
+    /**
+     * Live data with a list of clients.
+     */
+    LiveData<ArrayList<Client>> clientList;
 
-    public LiveData<String> getText() {
-        return mText;
+    /**
+     * Call the repository to grab the available clients.
+     */
+    void getClientList() {
+        clientList = clientsRepository.getClients();
     }
 }

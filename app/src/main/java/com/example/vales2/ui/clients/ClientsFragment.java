@@ -4,174 +4,91 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import androidx.annotation.Nullable;
+import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import com.example.vales2.R;
-import com.example.vales2.adapters.ClientsAdapter;
-import com.example.vales2.models.Client;
-import com.google.firebase.database.ChildEventListener;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 import com.mikelau.views.shimmer.ShimmerRecyclerViewX;
-import java.util.ArrayList;
 
 public class ClientsFragment extends Fragment {
 
-//    private ClientsViewModel clientsViewModel;
-    private ShimmerRecyclerViewX recyclerViewStudents;
-    DatabaseReference myRef;
+  /**
+   * A text view to display a no results found message.
+   */
+  private TextView textViewNoResultsFound;
 
+  /**
+   * The recycler view that is going to render the list of clients.
+   */
+  private ShimmerRecyclerViewX recyclerViewStudents;
 
-    ChildEventListener childEventListener;
+  /**
+   * The clients adapter in charge of passing the data to the recycler.
+   */
+  private ClientsAdapter clientsAdapter;
 
-    private ClientsAdapter mAdapter;
+  /**
+   * Initialize the recycler and its adapter. This will also start the skeleton
+   * effect provided by the recycler.
+   *
+   * @param root The root to find the view elements.
+   */
+  private void initRecycler(View root) {
+    recyclerViewStudents = root.findViewById(R.id.recycler_view_clients);
+    // Improve performance of the recycler view by letting it know the size is
+    // not affected by the contents.
+    recyclerViewStudents.setHasFixedSize(true);
 
-    private ArrayList<Client> clientList = new ArrayList<>();
+    clientsAdapter = new ClientsAdapter();
+    recyclerViewStudents.setAdapter(clientsAdapter);
+    recyclerViewStudents.setLayoutManager(new LinearLayoutManager(getContext()));
+    recyclerViewStudents.showShimmerAdapter();
+  }
 
-    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-//        clientsViewModel = ViewModelProviders.of(this).get(ClientsViewModel.class);
-//        final TextView textView = root.findViewById(R.id.text_dashboard);
-//        clientsViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
-//            @Override
-//            public void onChanged(@Nullable String s) {
-//                textView.setText(s);
-//            }
-//        });
+  /**
+   * Initialize the no results text view. This will be set as Gone initially.
+   *
+   * @param root The root to find the view elements.
+   */
+  private void initNoResultsFound(View root) {
+    textViewNoResultsFound = root.findViewById(R.id.fragment_clients_no_results);
+    textViewNoResultsFound.setVisibility(View.GONE);
+  }
 
-        View root = inflater.inflate(R.layout.fragment_clients, container, false);
+  /**
+   * Initialize the view model. This will observe the client list and will send
+   * it to the adapter. Also, this will change the visibility to gone or visible
+   * depending on the clients list size that is being observed.
+   */
+  private void initViewModel() {
+    ClientsViewModel clientsViewModel = new ViewModelProvider(this).get(ClientsViewModel.class);
+    clientsViewModel.getClientList();
 
-        recyclerViewStudents = root.findViewById(R.id.recyclerViewStudents);
-        myRef = FirebaseDatabase.getInstance().getReference("Clientes");
+    clientsViewModel.clientList.observe(getViewLifecycleOwner(), clients -> {
+      clientsAdapter.setClients(clients);
+      recyclerViewStudents.hideShimmerAdapter();
+      if (clients.isEmpty()) {
+        textViewNoResultsFound.setVisibility(View.VISIBLE);
+      }
+      else {
+        textViewNoResultsFound.setVisibility(View.GONE);
+      }
+    });
+  }
 
-        // solo sabemos que es necesario.
-        recyclerViewStudents.setHasFixedSize(true);
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    View root = inflater.inflate(R.layout.fragment_clients, container, false);
 
+    initRecycler(root);
+    initNoResultsFound(root);
+    initViewModel();
 
-        mAdapter = new ClientsAdapter(getContext(), clientList);
-
-
-        recyclerViewStudents.setAdapter(mAdapter);
-        recyclerViewStudents.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
-
-        getClients();
-
-
-        return root;
-    }
-
-
-
-    public void getClients(){
-        clientList.clear();
-        finishAllListener();
-
-        // Hace efecto de skeleton.
-        recyclerViewStudents.showShimmerAdapter();
-
-
-        childEventListener = myRef.addChildEventListener(new ChildEventListener() {
-            @Override
-            public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-                Client upload = dataSnapshot.getValue(Client.class);
-                clientList.add(clientList.size(), upload);
-
-                mAdapter.notifyItemInserted(clientList.size()-1);
-
-
-                recyclerViewStudents.hideShimmerAdapter();
-            }
-
-            @Override
-            public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-//                    ModeloStudent cambiado = dataSnapshot.getValue(ModeloStudent.class);
-//
-//                    for(int i = 0; i < mUploads.size(); i ++){
-//                        if(mUploads.get(i).getUid().equals(cambiado.getUid())){
-//                            mUploads.remove(i);
-////                            mAdapter.notifyItemRemoved(i);
-//                            mUploads.add(i,cambiado);
-//                            mAdapter.notifyItemChanged(i);
-//                        }
-//
-//                    }
-//
-//
-//                    if(mUploads.size() == 0){
-//                        showEmpty();
-//                        txtTitle.setText("No hay estudiantes");
-//                    }else{
-//                        hideEmpty();
-//                        if(mUploads.size() == 1){
-//                            txtTitle.setText("Estudiantes ' " + mUploads.size() + " resultado '");
-//                        }
-//                        else  {
-//                            txtTitle.setText("Estudiantes ' " + mUploads.size() + " resultados '");
-//                        }
-//                    }
-            }
-
-            @Override
-            public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
-//                    ModeloStudent eliminado = dataSnapshot.getValue(ModeloStudent.class);
-//
-//                    for(int i = 0; i < mUploads.size(); i ++){
-//                        if(mUploads.get(i).getUid().equals(eliminado.getUid())){
-//                            mUploads.remove(i);
-//                            mAdapter.notifyItemRemoved(i);
-//                        }
-//
-//                    }
-//
-//
-//                    if(mUploads.size() == 0){
-//                        showEmpty();
-//                        txtTitle.setText("No hay estudiantes");
-//                    }else{
-//                        hideEmpty();
-//                        if(mUploads.size() == 1){
-//                            txtTitle.setText("Estudiantes ' " + mUploads.size() + " resultado '");
-//                        }
-//                        else  {
-//                            txtTitle.setText("Estudiantes ' " + mUploads.size() + " resultados '");
-//                        }
-//                    }
-            }
-
-            @Override
-            public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
-
-
-
-    }
-
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        finishAllListener();
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        finishAllListener();
-    }
-
-    private void finishAllListener() {
-        if(childEventListener != null) {
-            myRef.removeEventListener(childEventListener);
-        }
-    }
-
+    return root;
+  }
 }
