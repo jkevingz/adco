@@ -73,7 +73,7 @@ public class ClientsFragment extends Fragment {
     clientsViewModel.getClientList();
 
     clientsViewModel.clientList.observe(getViewLifecycleOwner(), clients -> {
-      clientsAdapter.setClients(clients);
+      clientsAdapter.submitList(clients);
       recyclerViewStudents.hideShimmerAdapter();
       final int visibility = clients.isEmpty() ? View.VISIBLE : View.GONE;
       textViewNoResultsFound.setVisibility(visibility);

@@ -4,26 +4,33 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.RecyclerView;
+import androidx.recyclerview.widget.DiffUtil;
+import androidx.recyclerview.widget.ListAdapter;
 import com.example.vales2.R;
 import com.example.vales2.data.Client;
-import java.util.ArrayList;
 
-public class ClientsAdapter extends RecyclerView.Adapter<ClientsViewHolder> {
-
-  /**
-   * The client list that is passed to the view holder.
-   */
-  private ArrayList<Client> clientList = new ArrayList<>();
+public class ClientsAdapter extends ListAdapter<Client, ClientsViewHolder> {
 
   /**
-   * Set the client list and notify the change.
-   *
-   * @param clientList The client list that is passed to the view holder.
+   * Compare the items and determine if it's the same.
    */
-  void setClients(ArrayList<Client> clientList) {
-    this.clientList = clientList;
-    notifyDataSetChanged();
+  private static final DiffUtil.ItemCallback<Client> DIFF_CALLBACK = new DiffUtil.ItemCallback<Client>() {
+    @Override
+    public boolean areItemsTheSame(@NonNull Client oldItem, @NonNull Client newItem) {
+      return oldItem.getId().equals(newItem.getId());
+    }
+
+    @Override
+    public boolean areContentsTheSame(@NonNull Client oldItem, @NonNull Client newItem) {
+      return oldItem.getName().equals(newItem.getName()) && oldItem.isActive() == newItem.isActive();
+    }
+  };
+
+  /**
+   * ClientsAdapter's constructor.
+   */
+  protected ClientsAdapter() {
+    super(DIFF_CALLBACK);
   }
 
   /**
@@ -42,15 +49,7 @@ public class ClientsAdapter extends RecyclerView.Adapter<ClientsViewHolder> {
    */
   @Override
   public void onBindViewHolder(@NonNull ClientsViewHolder holder, int position) {
-    holder.bindData(clientList.get(position));
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public int getItemCount() {
-    return clientList.size();
+    holder.bindData(getItem(position));
   }
 
   /**
