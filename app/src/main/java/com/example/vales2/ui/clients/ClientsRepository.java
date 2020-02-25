@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.MutableLiveData;
 import com.example.vales2.data.Client;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -124,6 +125,18 @@ class ClientsRepository {
     ArrayList<Client> filteredList = new ArrayList<>(userList);
     filteredList.removeIf(client -> !client.getName().toLowerCase().contains(text.toLowerCase()));
     userListMutableLiveData.setValue(filteredList);
+  }
+
+  /**
+   * Store a new client record.
+   *
+   * @param name The client's name.
+   * @param address The client's address.
+   * @param phoneNumber The client's phone number.
+   */
+  void addClient(String name, String address, String phoneNumber) {
+    Client client = new Client(name, true, address, phoneNumber, FirebaseAuth.getInstance().getUid());
+    databaseReference.push().setValue(client);
   }
 
 }

@@ -24,4 +24,14 @@
     <string name="client_name_placeholder">Name</string>
     <string name="no_results">No hay resultados</string>
     <string name="search">buscar</string>
+    <string name="name">Nombre</string>
+    <string name="address">Dirección</string>
+    <string name="phone_number">Teléfono</string>
+    <string name="new_client">Nuevo Cliente</string>
+    <string name="cancel">Cancelar</string>
+    <string name="save">Guardar</string>
+    <string name="client_add_name_error">Ingrese el nombre</string>
+    <string name="client_add_address_error">Ingrese la dirección</string>
+    <string name="client_add_phone_number_error">Ingrese el teléfono</string>
+    <string name="client_add_success">El cliente se agregó exitosamente</string>
 </resources>

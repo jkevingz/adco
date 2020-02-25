@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.appcompat.widget.LinearLayoutCompat
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.appcompat.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
@@ -37,21 +37,21 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"/>
 
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/fragment_clients_fab"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentEnd="true"
+            android:layout_marginBottom="70dp"
+            android:layout_marginEnd="15dp"
+            android:src="@drawable/ic_person_add_black_24dp"
+            android:clickable="true"
+            android:focusable="true"
+            app:elevation="6dp"/>
+
     </RelativeLayout>
 
-    <!--    <com.github.clans.fab.FloatingActionMenu-->
-<!--        android:id="@+id/menu_red"-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:layout_gravity="bottom"-->
-<!--        android:paddingLeft="10dp"-->
-<!--        android:paddingRight="10dp"-->
-<!--        android:paddingBottom="10dp"-->
-<!--        fab:menu_backgroundColor="#000000"-->
-<!--        style="@style/MenuButtonsSmall.Green"-->
-<!--        fab:menu_labels_ellipsize="end"-->
-<!--        fab:menu_labels_singleLine="true">-->
 
 
-<!--    </com.github.clans.fab.FloatingActionMenu>-->
 </androidx.appcompat.widget.LinearLayoutCompat>

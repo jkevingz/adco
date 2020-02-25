@@ -6,14 +6,16 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.SearchView;
 import android.widget.TextView;
+import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import com.example.vales2.R;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.mikelau.views.shimmer.ShimmerRecyclerViewX;
 
-public class ClientsFragment extends Fragment {
+public class ClientsFragment extends Fragment implements ClientsDialog.ClientsDialogListener {
 
   /**
    * A text view to display a no results found message.
@@ -110,6 +112,20 @@ public class ClientsFragment extends Fragment {
   }
 
   /**
+   * Initialize the floating action button that is going to create a new client.
+   *
+   * @param root The root to find the view elements.
+   */
+  private void initFab(View root) {
+    FloatingActionButton fab = root.findViewById(R.id.fragment_clients_fab);
+    fab.setOnClickListener(l -> {
+      ClientsDialog dialog = new ClientsDialog();
+      dialog.setTargetFragment(this, 1);
+      dialog.show(getParentFragmentManager(), "client add dialog");
+    });
+  }
+
+  /**
    * {@inheritDoc}
    */
   @Override
@@ -120,7 +136,17 @@ public class ClientsFragment extends Fragment {
     initNoResultsFound(root);
     initViewModel();
     initSearchView(root);
+    initFab(root);
 
     return root;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public void onSuccess(String name, String address, String phoneNumber) {
+    clientsViewModel.addClient(name, address, phoneNumber);
+    Toast.makeText(getContext(), getString(R.string.client_add_success), Toast.LENGTH_SHORT).show();
   }
 }

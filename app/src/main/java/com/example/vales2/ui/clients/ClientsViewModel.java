@@ -33,4 +33,15 @@ public class ClientsViewModel extends ViewModel {
     clientsRepository.search(text);
   }
 
+  /**
+   * Call the repository to add a new client.
+   *
+   * @param name The client's name.
+   * @param address The client's address.
+   * @param phoneNumber The clients's phone number.
+   */
+  void addClient(String name, String address, String phoneNumber) {
+    clientsRepository.addClient(name, address, phoneNumber);
+  }
+
 }

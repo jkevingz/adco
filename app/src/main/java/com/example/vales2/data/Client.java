@@ -20,6 +20,21 @@ public class Client {
   private boolean active;
 
   /**
+   * The phone number to communicate with client.
+   */
+  private String phoneNumber;
+
+  /**
+   * The address of client.
+   */
+  private String address;
+
+  /**
+   * The owner of this client.
+   */
+  private String userId;
+
+  /**
    * Clients's empty constructor.
    */
   public Client() {}
@@ -30,9 +45,12 @@ public class Client {
    * @param name The label of the client.
    * @param active Whether is active of blocked.
    */
-  public Client(String name, boolean active) {
+  public Client(String name, boolean active, String address, String phoneNumber, String userId) {
     setName(name);
     setActive(active);
+    setAddress(address);
+    setPhoneNumber(phoneNumber);
+    setUserId(userId);
   }
 
   /**
@@ -104,4 +122,65 @@ public class Client {
     this.active = active;
     return this;
   }
+
+  /**
+   * Get the client's phone number.
+   *
+   * @return The phone number to communicate with client.
+   */
+  public String getPhoneNumber() {
+    return phoneNumber;
+  }
+
+  /**
+   * Set the client's phone number.
+   *
+   * @param phoneNumber The phone number to communicate with client.
+   * @return The current instance of this client.
+   */
+  public Client setPhoneNumber(String phoneNumber) {
+    this.phoneNumber = phoneNumber;
+    return this;
+  }
+
+  /**
+   * Get the client's address.
+   *
+   * @return The address of client.
+   */
+  public String getAddress() {
+    return address;
+  }
+
+  /**
+   * Set the client's address.
+   *
+   * @param address The address of client.
+   * @return The current instance of this client.
+   */
+  public Client setAddress(String address) {
+    this.address = address;
+    return this;
+  }
+
+  /**
+   * Get the client's user id.
+   *
+   * @return The owner of this client.
+   */
+  public String getUserId() {
+    return userId;
+  }
+
+  /**
+   * Set the client's user id.
+   *
+   * @param userId The owner of this client.
+   * @return The current instance of this client.
+   */
+  public Client setUserId(String userId) {
+    this.userId = userId;
+    return this;
+  }
+
 }
