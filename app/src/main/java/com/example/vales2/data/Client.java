@@ -108,6 +108,7 @@ public class Client {
    *
    * @return Whether is blocked or active.
    */
+  @Exclude
   public boolean isBlocked() {
     return !isActive();
   }

@@ -96,7 +96,8 @@ class ClientsRepository {
       };
     }
 
-    databaseReference.addChildEventListener(childEventListener);
+    databaseReference.orderByChild("userId").equalTo(FirebaseAuth.getInstance().getUid())
+      .addChildEventListener(childEventListener);
   }
 
   /**
