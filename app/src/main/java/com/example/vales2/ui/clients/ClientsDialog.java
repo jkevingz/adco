@@ -1,7 +1,6 @@
 package com.example.vales2.ui.clients;
 
 import android.app.Dialog;
-import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,6 +9,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatDialogFragment;
 import com.example.vales2.R;
+import com.example.vales2.data.Client;
 import com.google.android.material.textfield.TextInputEditText;
 
 public class ClientsDialog extends AppCompatDialogFragment {
@@ -35,6 +35,11 @@ public class ClientsDialog extends AppCompatDialogFragment {
   private TextInputEditText editTextPhoneNumber;
 
   /**
+   * The client information for the edit operation.
+   */
+  private Client client;
+
+  /**
    * Initialize the name, address, and phone number inputs.
    *
    * @param view The view to get the view element inputs.
@@ -43,6 +48,12 @@ public class ClientsDialog extends AppCompatDialogFragment {
     editTextName = view.findViewById(R.id.dialog_add_client_name_input);
     editTextAddress = view.findViewById(R.id.dialog_add_client_address_input);
     editTextPhoneNumber = view.findViewById(R.id.dialog_add_client_phone_input);
+
+    if (client != null) {
+      editTextName.setText(client.getName());
+      editTextAddress.setText(client.getAddress());
+      editTextPhoneNumber.setText(client.getPhoneNumber());
+    }
   }
 
   /**
@@ -72,23 +83,13 @@ public class ClientsDialog extends AppCompatDialogFragment {
   }
 
   /**
-   * {@inheritDoc}
+   * Clients dialog's constructor.
+   *
+   * @param listener The listener to send data back.
    */
-  @Override
-  public void onAttach(@NonNull Context context) {
-    super.onAttach(context);
-
-    if (context instanceof ClientsDialogListener) {
-      listener = (ClientsDialogListener) context;
-    }
-    else if(getTargetFragment() != null) {
-      listener = (ClientsDialogListener) getTargetFragment();
-    }
-    else {
-      throw new ClassCastException(
-        "The class " + context.getClass().getName() + " must implement ClientsDialogListener interface"
-      );
-    }
+  ClientsDialog(ClientsDialogListener listener, @Nullable Client client) {
+    this.listener = listener;
+    this.client = client;
   }
 
   /**
@@ -103,9 +104,13 @@ public class ClientsDialog extends AppCompatDialogFragment {
 
     initInputs(view);
 
-    builder.setView(view).setTitle(getString(R.string.new_client))
-      .setNegativeButton(getString(R.string.cancel), null)
-      .setPositiveButton(getString(R.string.save), null);
+    builder.setView(view).setNegativeButton(getString(R.string.cancel), null).setPositiveButton(getString(R.string.save), null);
+    if (client == null) {
+      builder.setTitle(getString(R.string.new_client));
+    }
+    else {
+      builder.setTitle(getString(R.string.edit_client));
+    }
 
     // Annoyingly, the default behavior of any button (including the ok button)
     // is to dismiss the modal on click. This default listener needs to be
@@ -123,7 +128,14 @@ public class ClientsDialog extends AppCompatDialogFragment {
       }
 
       dismiss();
-      listener.onSuccess(name, address, phoneNumber);
+      if (client == null) {
+        listener.onCreate(name, address, phoneNumber);
+      }
+      else {
+        client.setName(name).setAddress(address).setPhoneNumber(phoneNumber);
+        listener.onEdit(client);
+      }
+
     });
 
     return dialog;
@@ -137,13 +149,20 @@ public class ClientsDialog extends AppCompatDialogFragment {
   interface ClientsDialogListener {
 
     /**
-     * Callback for closing the dialog.
+     * Callback for adding a client..
      *
      * @param name The client's name.
      * @param address The client's address.
      * @param phoneNumber The client's phone number.
      */
-    void onSuccess(String name, String address, String phoneNumber);
+    void onCreate(String name, String address, String phoneNumber);
+
+    /**
+     * Callback for editing a client.
+     *
+     * @param client The client that is being edited.
+     */
+    void onEdit(Client client);
 
   }
 }

@@ -140,4 +140,33 @@ class ClientsRepository {
     databaseReference.push().setValue(client);
   }
 
+  /**
+   * Block a client, and store the change in firebase.
+   *
+   * @param client The client that is being blocked.
+   */
+  void blockClient(Client client) {
+    client.setActive(false);
+    editClient(client);
+  }
+
+  /**
+   * Unblock a client, and store the change in firebase.
+   *
+   * @param client The client that is being unblocked.
+   */
+  void unblockClient(Client client) {
+    client.setActive(true);
+    editClient(client);
+  }
+
+  /**
+   * Store the new client in firebase.
+   *
+   * @param client The client that is being edited.
+   */
+  void editClient(Client client) {
+    databaseReference.child(client.getId()).setValue(client);
+  }
+
 }

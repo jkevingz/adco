@@ -6,10 +6,16 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.ListAdapter;
+
 import com.example.vales2.R;
 import com.example.vales2.data.Client;
 
 public class ClientsAdapter extends ListAdapter<Client, ClientsViewHolder> {
+
+  /**
+   * The interface listener for the communication to the parent.
+   */
+  private ClientsViewHolder.ClientsViewHolderListener listener;
 
   /**
    * Compare the items and determine if it's the same.
@@ -29,8 +35,10 @@ public class ClientsAdapter extends ListAdapter<Client, ClientsViewHolder> {
   /**
    * ClientsAdapter's constructor.
    */
-  protected ClientsAdapter() {
+  protected ClientsAdapter(ClientsViewHolder.ClientsViewHolderListener listener) {
     super(DIFF_CALLBACK);
+
+    this.listener = listener;
   }
 
   /**
@@ -41,7 +49,7 @@ public class ClientsAdapter extends ListAdapter<Client, ClientsViewHolder> {
   public ClientsViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
     final View view = LayoutInflater.from(parent.getContext()).inflate(viewType, parent, false);
 
-    return new ClientsViewHolder(view);
+    return new ClientsViewHolder(view, listener);
   }
 
   /**

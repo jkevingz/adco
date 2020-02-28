@@ -34,4 +34,15 @@
     <string name="client_add_address_error">Ingrese la dirección</string>
     <string name="client_add_phone_number_error">Ingrese el teléfono</string>
     <string name="client_add_success">El cliente se agregó exitosamente</string>
+    <string name="block_client_description">Bloquear a un cliente</string>
+    <string name="unblock_client_description">Desbloquear a un cliente</string>
+    <string name="block">Bloquear</string>
+    <string name="yes">Si</string>
+    <string name="no">No</string>
+    <string name="block_client_confirmation_message">¿Seguro que deseas bloquear a este cliente?</string>
+    <string name="unblock">Desbloquear</string>
+    <string name="unblock_client_confirmation_message">¿Seguro desea desbloquear a este cliente?</string>
+    <string name="edit_client_description">Editar a un cliente</string>
+    <string name="edit_client">Editar Cliente</string>
+    <string name="client_edit_success">El cliente ha sido editado correctamente</string>
 </resources>

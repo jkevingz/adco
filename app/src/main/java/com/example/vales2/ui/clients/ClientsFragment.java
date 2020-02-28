@@ -8,15 +8,17 @@ import android.widget.SearchView;
 import android.widget.TextView;
 import android.widget.Toast;
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import com.example.vales2.R;
+import com.example.vales2.data.Client;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.mikelau.views.shimmer.ShimmerRecyclerViewX;
 
-public class ClientsFragment extends Fragment implements ClientsDialog.ClientsDialogListener {
+public class ClientsFragment extends Fragment implements
+  ClientsDialog.ClientsDialogListener, ClientsViewHolder.ClientsViewHolderListener {
 
   /**
    * A text view to display a no results found message.
@@ -50,10 +52,9 @@ public class ClientsFragment extends Fragment implements ClientsDialog.ClientsDi
     // not affected by the contents.
     recyclerViewStudents.setHasFixedSize(true);
 
-    clientsAdapter = new ClientsAdapter();
+    clientsAdapter = new ClientsAdapter(this);
     recyclerViewStudents.setAdapter(clientsAdapter);
     recyclerViewStudents.setLayoutManager(new LinearLayoutManager(getContext()));
-    recyclerViewStudents.addItemDecoration(new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL));
     recyclerViewStudents.showShimmerAdapter();
   }
 
@@ -121,7 +122,7 @@ public class ClientsFragment extends Fragment implements ClientsDialog.ClientsDi
   private void initFab(View root) {
     FloatingActionButton fab = root.findViewById(R.id.fragment_clients_fab);
     fab.setOnClickListener(l -> {
-      ClientsDialog dialog = new ClientsDialog();
+      ClientsDialog dialog = new ClientsDialog(this, null);
       dialog.setTargetFragment(this, 1);
       dialog.show(getParentFragmentManager(), "client add dialog");
     });
@@ -147,8 +148,55 @@ public class ClientsFragment extends Fragment implements ClientsDialog.ClientsDi
    * {@inheritDoc}
    */
   @Override
-  public void onSuccess(String name, String address, String phoneNumber) {
+  public void onCreate(String name, String address, String phoneNumber) {
     clientsViewModel.addClient(name, address, phoneNumber);
     Toast.makeText(getContext(), getString(R.string.client_add_success), Toast.LENGTH_SHORT).show();
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public void onEdit(Client client) {
+    clientsViewModel.editClient(client);
+    Toast.makeText(getContext(), R.string.client_edit_success, Toast.LENGTH_SHORT).show();
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public void onBlockClicked(Client client) {
+    AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+    builder.setTitle(getString(R.string.block))
+      .setMessage(getString(R.string.block_client_confirmation_message))
+      .setNegativeButton(getString(R.string.no), null)
+      .setPositiveButton(getString(R.string.yes), (dialog, which) -> clientsViewModel.blockClient(client));
+
+    builder.show();
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public void onUnblockClicked(Client client) {
+    AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+    builder.setTitle(getString(R.string.unblock))
+      .setMessage(getString(R.string.unblock_client_confirmation_message))
+      .setNegativeButton(getString(R.string.no), null)
+      .setPositiveButton(getString(R.string.yes), (dialog, which) -> clientsViewModel.unblockClient(client));
+
+    builder.show();
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public void onEditClicked(Client client) {
+    ClientsDialog dialog = new ClientsDialog(this, client);
+    dialog.setTargetFragment(this, 1);
+    dialog.show(getParentFragmentManager(), "client add dialog");
   }
 }

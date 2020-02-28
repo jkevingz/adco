@@ -44,4 +44,31 @@ public class ClientsViewModel extends ViewModel {
     clientsRepository.addClient(name, address, phoneNumber);
   }
 
+  /**
+   * Call the repository to block a client.
+   *
+   * @param client The client that is being blocked.
+   */
+  void blockClient(Client client) {
+    clientsRepository.blockClient(client);
+  }
+
+  /**
+   * Call the repository to unblock a client.
+   *
+   * @param client The client that is being unblocked.
+   */
+  void unblockClient(Client client) {
+    clientsRepository.unblockClient(client);
+  }
+
+  /**
+   * Call the repository to edit a client.
+   *
+   * @param client The client that is being edited.
+   */
+  void editClient(Client client) {
+    clientsRepository.editClient(client);
+  }
+
 }
