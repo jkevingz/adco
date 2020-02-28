@@ -84,6 +84,11 @@ public class ClientsDialog extends AppCompatDialogFragment {
     else if(getTargetFragment() != null) {
       listener = (ClientsDialogListener) getTargetFragment();
     }
+    else {
+      throw new ClassCastException(
+        "The class " + context.getClass().getName() + " must implement ClientsDialogListener interface"
+      );
+    }
   }
 
   /**

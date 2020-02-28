@@ -10,6 +10,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import com.example.vales2.R;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -52,6 +53,7 @@ public class ClientsFragment extends Fragment implements ClientsDialog.ClientsDi
     clientsAdapter = new ClientsAdapter();
     recyclerViewStudents.setAdapter(clientsAdapter);
     recyclerViewStudents.setLayoutManager(new LinearLayoutManager(getContext()));
+    recyclerViewStudents.addItemDecoration(new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL));
     recyclerViewStudents.showShimmerAdapter();
   }
 
